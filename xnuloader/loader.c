@@ -1489,7 +1489,7 @@ run_kernel(int have_checkpoint, uint64_t checkpoint)
 		if (*q == 0x545352444C554E58ULL /* "XNULDRST" */) {
 			q[1] = kernel_mpidr != this_mpidr ? (uint64_t)(uintptr_t)&other_cpu_return_stub :
 			    (uint64_t)(uintptr_t)&loader_return_stub;
-			q[2] = checkpoint;
+			q[2] = 1;
 			q[3] = slide;
 			print("return slot patched at %x, checkpoint %d\n", (uint64_t)(uintptr_t)q, checkpoint);
 			break;
