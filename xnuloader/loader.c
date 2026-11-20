@@ -305,6 +305,7 @@ clean_dcache(uint64_t start, uint64_t end)
 #include "platforms/qemu_virt.c"
 #include "platforms/redwood.c"
 #include "platforms/starlte.c"
+#include "platforms/beyondx.c"
 #include "platforms/star2lte.c"
 #include "platforms/crownlte.c"
 #include "platforms/frankel.c"
@@ -317,6 +318,7 @@ clean_dcache(uint64_t start, uint64_t end)
  */
 static const struct platform *const platforms[] = {
 	&platform_redwood,
+    &platform_beyondx,
 	&platform_starlte,
 	&platform_frankel,
 	&platform_qemu_lga,
