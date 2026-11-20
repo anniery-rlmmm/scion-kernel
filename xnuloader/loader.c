@@ -2002,8 +2002,8 @@ run_kernel(int have_checkpoint, uint64_t checkpoint)
 	flush_log();
 	splash_step(250);
 	screen_quiet_before_run = screen_quiet;
-	screen_quiet = 1;               /* the screen is the kernel's now; the log still takes every line */
-	/* From here on the kernel feeds the watchdog (boot-arg hv_wdt_pet, see loader_return.c in XNU). */
+	/* screen_quiet = 1; */               /* the screen is the kernel's now; the log still takes every line */
+	print("1: wdt\n");/* From here on the kernel feeds the watchdog (boot-arg hv_wdt_pet, see loader_return.c in XNU). */
 	wdt_set_ms(60000);
 
 	/* --- hand off (UEFI is left resident, see loader_save_ctx) ------------ */
@@ -2014,6 +2014,7 @@ run_kernel(int have_checkpoint, uint64_t checkpoint)
 		 * so everything it owns must be written back to RAM first: clean
 		 * every allocated region in the memory map, then this stack again.
 		 */
+        print("2: cache\n");
 		map_size = sizeof(map_buf);
 		if (!EFI_ERROR(BS->get_memory_map(&map_size, map_buf, &map_key, &desc_size, &desc_ver))) {
 			for (uint64_t off = 0; off < map_size; off += desc_size) {
@@ -2031,7 +2032,7 @@ run_kernel(int have_checkpoint, uint64_t checkpoint)
 		clean_dcache(sp_now - 0x2000, sp_now + 0x2000);
 		flush_dcache(phys_base, top);
 		if (1) {
-			/* Do not enter the kernel at all: exercise only the return path. */
+			print("3: jump\n"); /* Do not enter the kernel at all: exercise only the return path. */
 			jump_to_kernel((uint64_t)(uintptr_t)&loader_return_stub, 0);
 		}
 		if (kernel_mpidr != this_mpidr) {
