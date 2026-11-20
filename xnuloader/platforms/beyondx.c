@@ -11,8 +11,8 @@ static const struct platform platform_beyondx = {
     .timer_hz = 26000000,
     .fb_base = 0xCA000000,
     .vol_down_reg = 0, .vol_down_bit = 0,
-    .ram_log = 0, .ram_log_size = 0,
-    .ram_dump = 0, .ram_dump_size = 0,
+    .ram_log = 0xEB30C000, .ram_log_size = 0x4000,
+    .ram_dump = 0xEB308000, .ram_dump_size = 0x4000,
     .log_other_cpu = 0,
     .recovery_pmu = 0,
 };
