@@ -1512,7 +1512,7 @@ run_kernel(int have_checkpoint, uint64_t checkpoint)
 		 * v_display is how iBoot says "graphics mode": the kernel then keeps
 		 * its text off the screen. A verbose boot (-v) wants the text.
 		 */
-		int verbose = 0;
+		int verbose = 1;
 		for (const char *c = pi.cmdline; *c; c++) {
 			verbose |= starts_with(c, "-v") && (c[2] == ' ' || c[2] == 0) && (c == pi.cmdline || c[-1] == ' ');
 		}
