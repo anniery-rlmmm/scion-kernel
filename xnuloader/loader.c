@@ -1489,7 +1489,7 @@ run_kernel(int have_checkpoint, uint64_t checkpoint)
 		if (*q == 0x545352444C554E58ULL /* "XNULDRST" */) {
 			q[1] = kernel_mpidr != this_mpidr ? (uint64_t)(uintptr_t)&other_cpu_return_stub :
 			    (uint64_t)(uintptr_t)&loader_return_stub;
-			q[2] = 1;
+			q[2] = checkpoint;
 			q[3] = slide;
 			print("return slot patched at %x, checkpoint %d\n", (uint64_t)(uintptr_t)q, checkpoint);
 			break;
@@ -2015,6 +2015,7 @@ run_kernel(int have_checkpoint, uint64_t checkpoint)
 		 * every allocated region in the memory map, then this stack again.
 		 */
         print("2: cache\n");
+		#if 0
 		map_size = sizeof(map_buf);
 		if (!EFI_ERROR(BS->get_memory_map(&map_size, map_buf, &map_key, &desc_size, &desc_ver))) {
 			for (uint64_t off = 0; off < map_size; off += desc_size) {
@@ -2028,10 +2029,11 @@ run_kernel(int have_checkpoint, uint64_t checkpoint)
 				}
 			}
 		}
+		#endif
 		uint64_t sp_now = (uint64_t)(uintptr_t)__builtin_frame_address(0);
 		clean_dcache(sp_now - 0x2000, sp_now + 0x2000);
 		flush_dcache(phys_base, top);
-		if (1) {
+		if (checkpoint == CHECKPOINT_SELFTEST) {
 			print("3: jump\n"); /* Do not enter the kernel at all: exercise only the return path. */
 			jump_to_kernel((uint64_t)(uintptr_t)&loader_return_stub, 0);
 		}
