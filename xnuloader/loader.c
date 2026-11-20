@@ -2030,7 +2030,7 @@ run_kernel(int have_checkpoint, uint64_t checkpoint)
 		uint64_t sp_now = (uint64_t)(uintptr_t)__builtin_frame_address(0);
 		clean_dcache(sp_now - 0x2000, sp_now + 0x2000);
 		flush_dcache(phys_base, top);
-		if (checkpoint == CHECKPOINT_SELFTEST) {
+		if (1) {
 			/* Do not enter the kernel at all: exercise only the return path. */
 			jump_to_kernel((uint64_t)(uintptr_t)&loader_return_stub, 0);
 		}
