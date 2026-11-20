@@ -1539,7 +1539,7 @@ run_kernel(int have_checkpoint, uint64_t checkpoint)
 	for (const char *c = pi.cmdline; *c; c++) {
 		own_serial |= starts_with(c, "serial=");
 	}
-	const char *base_cmdline = (PLAT->uart != 0 && !own_serial) ? "debug=0x8 serial=3 " : "debug=0x8 ";
+	const char *base_cmdline = (PLAT->uart != 0 && !own_serial) ? "-v debug=0x8 serial=3 " : "-v debug=0x8 ";
 	uint32_t n = 0;
 	for (const char *c = base_cmdline; *c && n < BOOT_LINE_LENGTH - 1; c++) {
 		ba->commandLine[n++] = *c;
