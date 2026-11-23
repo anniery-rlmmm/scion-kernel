@@ -37,7 +37,7 @@ jobs:
 
       - name: Compilar kernel y loader
         run: |
-          make kernel loader-open
+          make kernel loader-open || (echo "=== exporthdrs.log ==="; tail -n 60 xnu-deps/exporthdrs.log 2>/dev/null; exit 1)
 
       - name: Empaquetar payload.bin con root.apfs
         run: |
