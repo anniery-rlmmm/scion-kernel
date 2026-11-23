@@ -22,9 +22,9 @@ jobs:
 
       - name: Instalar dependencias base
         run: |
+          echo "deb http://archive.ubuntu.com/ubuntu jammy universe" | sudo tee /etc/apt/sources.list.d/jammy.list
           sudo apt-get update
-          sudo apt-get install -y build-essential git curl tar xz-utils python3 clang lld llvm bison flex gperf rsync bc cpio uuid-dev libssl-dev libtinfo6 libxml2 libedit2
-          sudo ln -sf /usr/lib/x86_64-linux-gnu/libtinfo.so.6 /usr/lib/x86_64-linux-gnu/libtinfo.so.5
+          sudo apt-get install -y build-essential git curl tar xz-utils python3 clang lld llvm bison flex gperf rsync bc cpio uuid-dev libssl-dev libtinfo5 libxml2 libedit2
           
       - name: Instalar Theos, toolchain y SDKs
         run: |
