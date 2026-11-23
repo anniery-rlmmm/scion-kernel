@@ -6,6 +6,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      THEOS: /home/runner/theos
     steps:
       - name: Clonar scion-kernel
         uses: actions/checkout@v4
@@ -18,10 +20,18 @@ jobs:
           fi
           ls -lh userland/root.apfs
 
-      - name: Instalar dependencias
+      - name: Instalar dependencias base
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential python3 clang lld llvm
+          sudo apt-get install -y build-essential git curl tar xz-utils python3 clang lld llvm
+
+      - name: Instalar Theos y toolchain de Linux
+        run: |
+          git clone --depth 1 https://github.com/theos/theos.git "$THEOS"
+          mkdir -p "$THEOS/toolchain/linux/iphone"
+          curl -L --fail https://github.com/sbingner/llvm-project/releases/latest/download/linux-ios-arm64e-clang-toolchain.tar.lzma \
+            | tar --lzma -x -C "$THEOS/toolchain/linux/iphone" --strip-components=1
+          ls -la "$THEOS/toolchain/linux/iphone/bin" | head -n 20
 
       - name: Compilar kernel y loader
         run: |
