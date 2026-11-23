@@ -1,0 +1,45 @@
+name: Build S10 5G Payload (with root.apfs)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clonar scion-kernel
+        uses: actions/checkout@v4
+
+      - name: Verificar que exista userland/root.apfs
+        run: |
+          if [ ! -f userland/root.apfs ]; then
+            echo "ERROR: Falta subir userland/root.apfs al repositorio."
+            exit 1
+          fi
+          ls -lh userland/root.apfs
+
+      - name: Instalar dependencias
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential python3 clang lld llvm
+
+      - name: Compilar kernel y loader
+        run: |
+          make kernel loader-open
+
+      - name: Empaquetar payload.bin con root.apfs
+        run: |
+          python3 xnuloader/mkpayload.py -o payload.bin \
+            kernel=hakios-kernel \
+            resident=userland/root.apfs \
+            --cmdline "-v debug=0x8 rd=md0 cpus=1"
+          ls -lh payload.bin
+
+      - name: Subir payload.bin y loader
+        uses: actions/upload-artifact@v4
+        with:
+          name: s10-5g-payload-root
+          path: |
+            payload.bin
+            xnuloader/loader.efi
+          if-no-files-found: warn
