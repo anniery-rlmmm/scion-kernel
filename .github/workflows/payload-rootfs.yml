@@ -28,12 +28,10 @@ jobs:
           
       - name: Instalar Theos, toolchain y SDKs
         run: |
-          git clone --depth 1 https://github.com/theos/theos.git "$THEOS"
+          yes | bash -c "$(curl -fsSL https://raw.githubusercontent.com/theos/theos/master/bin/install-theos)" || true
           rm -rf "$THEOS/sdks"
           git clone --depth 1 https://github.com/theos/sdks.git "$THEOS/sdks"
-          mkdir -p "$THEOS/toolchain/linux/iphone"
-          curl -L --fail https://github.com/sbingner/llvm-project/releases/latest/download/linux-ios-arm64e-clang-toolchain.tar.lzma \
-            | tar --lzma -x -C "$THEOS/toolchain/linux/iphone" --strip-components=1
+          ls -la "$THEOS/toolchain/linux/iphone/bin" | head -n 20
           ls -d "$THEOS/sdks/iPhoneOS16.5.sdk"
 
       - name: Compilar kernel y loader
